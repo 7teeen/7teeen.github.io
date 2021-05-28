@@ -1,0 +1,377 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Node.JS+Vue+Vite+D3 | 7teen</title>
+<link rel="shortcut icon" href="https://7teeen.github.io/favicon.ico?v=1622172915870">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://7teeen.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Node.JS+Vue+Vite+D3 | 7teen - Atom Feed" href="https://7teeen.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Node.JS+Vue+Vite+D3笔记
+重要概念📕
+
+Node.js：本教程开发的前置基础环境
+npm / yarn：包管理工具，npm 已随 Node.js 默认安装，yarn可选（但建议尝试）
+D3：指Data-Driven Do..." />
+    <meta name="keywords" content="数据可视化" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://7teeen.github.io">
+  <img class="avatar" src="https://7teeen.github.io/images/avatar.png?v=1622172915870" alt="">
+  </a>
+  <h1 class="site-title">
+    7teen
+  </h1>
+  <p class="site-description">
+    僕らは最初で最後の今を生きているんだよ
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Node.JS+Vue+Vite+D3
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-05-28
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://7teeen.github.io/tag/zDXIKW63p/" class="post-tag">
+                  # 数据可视化
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="nodejsvuevited3笔记">Node.JS+Vue+Vite+D3笔记</h1>
+<h2 id="重要概念">重要概念📕</h2>
+<ul>
+<li>Node.js：本教程开发的前置基础环境</li>
+<li>npm / yarn：包管理工具，npm 已随 Node.js 默认安装，yarn可选（但建议尝试）</li>
+<li>D3：指Data-Driven Documents，数据可视化最为流行的基础库</li>
+<li>Vue：The Progressive JavaScript Framework，目前最为流行的前端框架之一，相比React学习曲线要更为平缓</li>
+<li>Vite：Native-ESM powered web dev build tool，面向未来的前端构建工具</li>
+</ul>
+<h2 id="尝试安装nodejs">尝试安装Node.js</h2>
+<p>Node.js下载地址👉🏻<a href="http://nodejs.cn/download/">Node.js下载点这里</a></p>
+<p>验证是否安装成功：Terminal输入<code>node --version</code>（如有对应版本输出，即为安装成功）</p>
+<h2 id="尝试安装vue-vite">尝试安装Vue / Vite</h2>
+<p>如果没有安装yarn，需要先使用命令<code>npm install yarn</code>进行安装</p>
+<ul>
+<li><strong>安装Vue</strong></li>
+</ul>
+<pre><code>npm install vue
+yarn add vue
+</code></pre>
+<p>(如果需要指定版本的vue可以把vue换成vue@版本)</p>
+<ul>
+<li><strong>安装Vite</strong></li>
+</ul>
+<pre><code>npm install vite
+</code></pre>
+<ul>
+<li><strong>创建一个vue的空工程（此处命名为hellovue）</strong></li>
+</ul>
+<pre><code>npm init vite-app hellovue
+</code></pre>
+<ul>
+<li><strong>也可以利用现有模版来创建工程</strong></li>
+</ul>
+<pre><code>#npm 6.x
+npm init @vitejs/app my-vue-app --template vue
+
+#npm 7+, extra double-dash is needed:
+npm init @vitejs/app my-vue-app – --template vue
+
+#yarn
+yarn create @vitejs/app my-vue-app --template vue
+</code></pre>
+<ul>
+<li><strong>运行创建的web工程</strong></li>
+</ul>
+<pre><code>npm run dev
+</code></pre>
+<p>网页输入<code>http://localhost:8080</code>,即可出现如下界面<br>
+<img width="1264" alt="image" src="https://user-images.githubusercontent.com/84889770/119806371-ba40eb80-bf14-11eb-89ab-879ae32d433e.png"></p>
+<ul>
+<li>
+<p><strong>mac用户安装VScode</strong></p>
+<p>VScode下载点这里👉🏻<a href="https://code.visualstudio.com">VScode下载</a></p>
+</li>
+</ul>
+<h2 id="d3直方图">D3直方图📊</h2>
+<ul>
+<li><strong>安装D3 / axios</strong></li>
+</ul>
+<pre><code>yarn add d3
+yarn add axios
+</code></pre>
+<ul>
+<li><strong>关键代码</strong></li>
+</ul>
+<p>Barchart.vue</p>
+<pre><code>&lt;template&gt;
+ &lt;h2&gt;罗可意201811153028 咱是直方图&lt;/h2&gt;
+ &lt;div id=&quot;bar-chart-container&quot;&gt;&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { defineComponent } from &quot;vue&quot;;
+import axios from &quot;axios&quot;;
+import * as d3 from &quot;d3&quot;;
+
+export default defineComponent({
+ data() {
+   return {
+     color: &quot;steelblue&quot;,
+     margin: { top: 30, right: 0, bottom: 30, left: 40 },
+   };
+ },
+ /**
+  * 在挂载后即开始执行
+  */
+ mounted() {
+   axios.get(&quot;./alphabet.json&quot;).then((res) =&gt; {
+     const barChartData = Object.assign(this.formatData(res.data), {
+       format: &quot;%&quot;,
+       y: &quot;↑ Frequency&quot;,
+     });
+     this.drawBarChart(barChartData);
+   });
+ },
+
+ methods: {
+   /**
+    * 格式化数据
+    */
+   formatData(data) {
+     return data
+       .map(({ letter, frequency }) =&gt; {
+         return { name: letter, value: frequency };
+       })
+       .sort((a, b) =&gt; d3.descending(a.value, b.value));
+   },
+
+   /**
+    * 绘制直方图
+    */
+   drawBarChart(data) {
+     const margin = this.margin;
+
+     const width = 800;
+     const height = 500;
+
+     // 初始化 SVG 元素
+     const svg = d3
+       .select(&quot;#bar-chart-container&quot;)
+       .append(&quot;svg&quot;)
+       .attr(&quot;class&quot;, &quot;bar-chart&quot;)
+       .attr(&quot;viewBox&quot;, `0 0 ${width} ${height}`)
+       .attr(&quot;width&quot;, width)
+       .attr(&quot;height&quot;, height)
+       .append(&quot;g&quot;);
+
+     // https://observablehq.com/@d3/d3-scaleband
+     // x 轴的缩放比例尺
+     const x = d3
+       .scaleBand()
+       .domain(d3.range(data.length))
+       .range([margin.left, width - margin.right])
+       .padding(0.1);
+
+     // y 轴的缩放比例尺
+     const y = d3
+       .scaleLinear()
+       .domain([0, d3.max(data, (d) =&gt; d.value)])
+       .nice()
+       .range([height - margin.bottom, margin.top]);
+
+     // x 坐标轴
+     // tickSizeOuter(0) 移除 0 处初始的标记
+     // tickFormat https://github.com/d3/d3-scale/blob/master/README.md#tickFormat
+     const xAxis = (g) =&gt;
+       g.attr(&quot;transform&quot;, `translate(0,${height - margin.bottom})`).call(
+         d3
+           .axisBottom(x)
+           .tickFormat((i) =&gt; data[i].name)
+           .tickSizeOuter(0)
+       );
+
+     // y 坐标轴
+     const yAxis = (g) =&gt;
+       g
+         .attr(&quot;transform&quot;, `translate(${margin.left},0)`)
+         .call(d3.axisLeft(y).ticks(null, data.format))
+         // 移除区域间的竖线
+         .call((g) =&gt; g.select(&quot;.domain&quot;).remove())
+         .call((g) =&gt;
+           g
+             .append(&quot;text&quot;)
+             .attr(&quot;x&quot;, -margin.left)
+             .attr(&quot;y&quot;, 10)
+             .attr(&quot;fill&quot;, &quot;currentColor&quot;)
+             .attr(&quot;text-anchor&quot;, &quot;start&quot;)
+             .text(data.y)
+         );
+
+     svg
+       .append(&quot;g&quot;)
+       .attr(&quot;fill&quot;, this.color)
+       .selectAll(&quot;rect&quot;)
+       .data(data)
+       .join(&quot;rect&quot;)
+       .attr(&quot;x&quot;, (d, i) =&gt; x(i))
+       .attr(&quot;y&quot;, (d) =&gt; y(d.value))
+       .attr(&quot;height&quot;, (d) =&gt; y(0) - y(d.value))
+       .attr(&quot;width&quot;, x.bandwidth());
+
+     // 绘制到 SVG
+     svg.append(&quot;g&quot;).call(xAxis);
+     svg.append(&quot;g&quot;).call(yAxis);
+   },
+ },
+});
+&lt;/script&gt;
+</code></pre>
+<p>App.vue</p>
+<pre><code>&lt;template&gt;
+  &lt;img alt=&quot;Vue logo&quot; src=&quot;./assets/logo.png&quot; /&gt;
+  &lt;HelloWorld msg=&quot;Hello&quot; /&gt;
+  &lt;bar-chart /&gt;
+  &lt;test-axios /&gt;
+
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import HelloWorld from &quot;./components/HelloWorld.vue&quot;;
+import TestAxios from &quot;./components/TestAxios.vue&quot;;
+import BarChart from &quot;./components/BarChart.vue&quot;;
+&lt;/script&gt;
+</code></pre>
+<ul>
+<li><strong>最终可视化结果如下</strong>👇🏻<br>
+<img src="https://user-images.githubusercontent.com/84889770/119807918-30921d80-bf16-11eb-999c-87d1f3cb1a67.png" alt="image" loading="lazy"></li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#nodejsvuevited3%E7%AC%94%E8%AE%B0">Node.JS+Vue+Vite+D3笔记</a>
+<ul>
+<li><a href="#%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5">重要概念📕</a></li>
+<li><a href="#%E5%B0%9D%E8%AF%95%E5%AE%89%E8%A3%85nodejs">尝试安装Node.js</a></li>
+<li><a href="#%E5%B0%9D%E8%AF%95%E5%AE%89%E8%A3%85vue-vite">尝试安装Vue / Vite</a></li>
+<li><a href="#d3%E7%9B%B4%E6%96%B9%E5%9B%BE">D3直方图📊</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://7teeen.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

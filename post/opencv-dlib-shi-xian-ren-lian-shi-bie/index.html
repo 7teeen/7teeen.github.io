@@ -1,0 +1,294 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Opencv + dlib实现人脸识别 | 7teen</title>
+<link rel="shortcut icon" href="https://7teeen.github.io/favicon.ico?v=1622172915870">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://7teeen.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Opencv + dlib实现人脸识别 | 7teen - Atom Feed" href="https://7teeen.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="demo_1: 人脸定位（仅opencv）
+
+安装opencv
+
+pip install opencv-python
+
+❗️需要包Python路径下/Lib/site-packages/cv2/data/haarcascade_fronta..." />
+    <meta name="keywords" content="数据可视化" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://7teeen.github.io">
+  <img class="avatar" src="https://7teeen.github.io/images/avatar.png?v=1622172915870" alt="">
+  </a>
+  <h1 class="site-title">
+    7teen
+  </h1>
+  <p class="site-description">
+    僕らは最初で最後の今を生きているんだよ
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Opencv + dlib实现人脸识别
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-05-28
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://7teeen.github.io/tag/zDXIKW63p/" class="post-tag">
+                  # 数据可视化
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="demo_1-人脸定位仅opencv">demo_1: 人脸定位（仅opencv）</h2>
+<ul>
+<li><strong>安装opencv</strong></li>
+</ul>
+<pre><code>pip install opencv-python
+</code></pre>
+<p>❗️需要包<code>Python路径下/Lib/site-packages/cv2/data/haarcascade_frontalface_default.xml</code></p>
+<ul>
+<li><strong>代码</strong></li>
+</ul>
+<p>demo1_1.py</p>
+<pre><code>import cv2
+
+def detect(filename):
+    face_cascade = cv2.CascadeClassifier('/Users/keyi/PycharmProjects/face1/venv/lib/python3.8/site-packages/cv2/data/haarcascade_frontalface_default.xml')
+
+    img = cv2.imread(filename)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+    for (x, y, w, h) in faces:
+        img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+
+    cv2.imshow('Person Detected!', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    detect('/Users/keyi/Downloads/IMG_1971.JPG')
+</code></pre>
+<p>准确性更好的demo1_2.py</p>
+<pre><code>import face_recognition
+import cv2
+
+image = face_recognition.load_image_file(&quot;/Users/keyi/Downloads/IMG_1971.JPG&quot;)
+face_locations_noCNN=face_recognition.face_locations(image)
+# A list of tuples of found face locations in css (top, right, bottom, left) order
+# 因为返回值的顺序是这样子的，因此在后面的for循环里面赋值要注意按这个顺序来
+
+
+
+print(&quot;face_location_noCNN:&quot;)
+print(face_locations_noCNN)
+face_num2=len(face_locations_noCNN)
+print(face_num2)       # The number of faces
+# 到这里为止，可以观察两种情况的坐标和人脸数，一般来说，坐标会不一样，但是检测出来的人脸数应该是一样的
+# 也就是说face_num1　＝　face_num２；　face_locations_useCNN　和　face_locations_noCNN　不一样
+
+
+org = cv2.imread(&quot;/Users/keyi/Downloads/IMG_1971.JPG&quot;)
+img = cv2.imread(&quot;/Users/keyi/Downloads/IMG_1971.JPG&quot;)
+cv2.imshow(&quot;/Users/keyi/Downloads/IMG_1971.JPG&quot;,img)  # 原始图片
+
+
+
+
+for i in range(0,face_num2):
+    top = face_locations_noCNN[i][0]
+    right = face_locations_noCNN[i][1]
+    bottom = face_locations_noCNN[i][2]
+    left = face_locations_noCNN[i][3]
+
+    start = (left, top)
+    end = (right, bottom)
+
+    color = (0,255,255)
+    thickness = 2
+    cv2.rectangle(org, start, end, color, thickness)
+
+cv2.imshow(&quot;no cnn &quot;,org)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+</code></pre>
+<p>可得到人脸识别后图像👇🏻</p>
+<img width="509" alt="image" src="https://user-images.githubusercontent.com/84889770/119914869-d5067500-bf93-11eb-9286-49dcccbeab86.png">
+<h2 id="demo_2-人脸定位dlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</h2>
+<ul>
+<li><strong>安装dlib / face_recognition</strong></li>
+</ul>
+<pre><code>pip install dlib
+pip install face_recognition
+</code></pre>
+<p>❗️需要包<code>shape_predictor_68_face_landmarks.dat</code></p>
+<ul>
+<li><strong>demo2代码</strong></li>
+</ul>
+<p>demo2.py</p>
+<pre><code>#coding=utf-8
+
+import cv2
+import dlib
+
+path = &quot;/Users/keyi/Downloads/IMG_1971.JPG&quot;
+img = cv2.imread(path)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+#人脸分类器
+detector = dlib.get_frontal_face_detector()
+# 获取人脸检测器
+predictor = dlib.shape_predictor(r&quot;/Users/keyi/PycharmProjects/face1/venv/lib/python3.8/site-packages/face_recognition_models/models/shape_predictor_68_face_landmarks.dat&quot;)
+dets = detector(gray, 1)
+for face in dets:
+    shape = predictor(img, face)  # 寻找人脸的68个标定点
+    # 遍历所有点，打印出其坐标，并圈出来
+    for pt in shape.parts():
+        pt_pos = (pt.x, pt.y)
+        cv2.circle(img, pt_pos, 2, (0, 255, 0), 1)
+    cv2.imshow(&quot;image&quot;, img)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+</code></pre>
+<p>可得到人脸定位结果如下👇🏻</p>
+<img width="901" alt="image" src="https://user-images.githubusercontent.com/84889770/119915440-1f3c2600-bf95-11eb-9b7a-640eaa556f7f.png">
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#demo_1-%E4%BA%BA%E8%84%B8%E5%AE%9A%E4%BD%8D%E4%BB%85opencv">demo_1: 人脸定位（仅opencv）</a></li>
+<li><a href="#demo_2-%E4%BA%BA%E8%84%B8%E5%AE%9A%E4%BD%8Ddlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://7teeen.github.io/post/nodejsvuevited3/">
+              <h3 class="post-title">
+                Node.JS+Vue+Vite+D3
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://7teeen.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
