@@ -2,22 +2,20 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Opencv + dlib实现人脸识别 | 7teen</title>
-<link rel="shortcut icon" href="https://7teeen.github.io/favicon.ico?v=1622173715709">
+<title>Opencv + dlib实现人脸识别与匹配 | 7teen</title>
+<link rel="shortcut icon" href="https://7teeen.github.io/favicon.ico?v=1622187385759">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://7teeen.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Opencv + dlib实现人脸识别 | 7teen - Atom Feed" href="https://7teeen.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Opencv + dlib实现人脸识别与匹配 | 7teen - Atom Feed" href="https://7teeen.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
     <meta name="description" content="demo_1: 人脸定位（仅opencv）
-
 安装opencv
-
 pip install opencv-python
 
-❗️需要包Python路径下/Lib/site-packages/cv2/data/haarcascade_fronta..." />
+❗️需要包Python路径下/Lib/site-packages/cv2/data/haarcascade_frontalf..." />
     <meta name="keywords" content="数据可视化" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -27,7 +25,7 @@ pip install opencv-python
       <div class="main-content">
         <div class="site-header">
   <a href="https://7teeen.github.io">
-  <img class="avatar" src="https://7teeen.github.io/images/avatar.png?v=1622173715709" alt="">
+  <img class="avatar" src="https://7teeen.github.io/images/avatar.png?v=1622187385759" alt="">
   </a>
   <h1 class="site-title">
     7teen
@@ -74,14 +72,14 @@ pip install opencv-python
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Opencv + dlib实现人脸识别
+              Opencv + dlib实现人脸识别与匹配
             </h2>
             <div class="post-info">
               <span>
                 2021-05-28
               </span>
               <span>
-                3 min read
+                4 min read
               </span>
               
                 <a href="https://7teeen.github.io/tag/zDXIKW63p/" class="post-tag">
@@ -92,16 +90,12 @@ pip install opencv-python
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="demo_1-人脸定位仅opencv">demo_1: 人脸定位（仅opencv）</h2>
-<ul>
-<li><strong>安装opencv</strong></li>
-</ul>
+                <h1 id="demo_1-人脸定位仅opencv">demo_1: 人脸定位（仅opencv）</h1>
+<h2 id="安装opencv">安装opencv</h2>
 <pre><code>pip install opencv-python
 </code></pre>
 <p>❗️需要包<code>Python路径下/Lib/site-packages/cv2/data/haarcascade_frontalface_default.xml</code></p>
-<ul>
-<li><strong>代码</strong></li>
-</ul>
+<h2 id="代码实现">代码实现</h2>
 <p>demo1_1.py</p>
 <pre><code>import cv2
 
@@ -171,17 +165,13 @@ cv2.destroyAllWindows()
 </code></pre>
 <p>可得到人脸识别后图像👇🏻</p>
 <img width="509" alt="image" src="https://user-images.githubusercontent.com/84889770/119914869-d5067500-bf93-11eb-9286-49dcccbeab86.png">
-<h2 id="demo_2-人脸定位dlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</h2>
-<ul>
-<li><strong>安装dlib / face_recognition</strong></li>
-</ul>
+<h1 id="demo_2-人脸定位dlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</h1>
+<h2 id="安装dlib-face_recognition">安装dlib / face_recognition</h2>
 <pre><code>pip install dlib
 pip install face_recognition
 </code></pre>
 <p>❗️需要包<code>shape_predictor_68_face_landmarks.dat</code></p>
-<ul>
-<li><strong>demo2代码</strong></li>
-</ul>
+<h2 id="代码实现-2">代码实现</h2>
 <p>demo2.py</p>
 <pre><code>#coding=utf-8
 
@@ -210,14 +200,71 @@ cv2.destroyAllWindows()
 </code></pre>
 <p>可得到人脸定位结果如下👇🏻</p>
 <img width="901" alt="image" src="https://user-images.githubusercontent.com/84889770/119915440-1f3c2600-bf95-11eb-9b7a-640eaa556f7f.png">
+<h1 id="demo_3-人脸匹配">demo_3: 人脸匹配</h1>
+<h2 id="原理">原理</h2>
+<p>每个人脸识别系统都有自己的人脸数据库，该数据库包含人脸特征向量和对应的信息。</p>
+<ul>
+<li>人脸特征向量提取：</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://7teeen.github.io/post-images/1622187304697.png" alt="" loading="lazy"></figure>
+<ul>
+<li>特征向量PCA降维：</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://7teeen.github.io/post-images/1622187313947.png" alt="" loading="lazy"></figure>
+<h2 id="代码实现-3">代码实现</h2>
+<p>demo3.py</p>
+<pre><code>import cv2
+import face_recognition
+#显示已知图片
+known_image=cv2.imread(&quot;/Users/keyi/Downloads/IMG_1892.JPG&quot;)
+cv2.imshow(&quot;image&quot;, known_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+known_image = face_recognition.load_image_file(&quot;/Users/keyi/Downloads/IMG_1892.JPG&quot;)
+# 显示待匹配图片
+unknown_image=cv2.imread(&quot;/Users/keyi/Downloads/IMG_1747.JPG&quot;)
+cv2.imshow(&quot;unknown_image&quot;, unknown_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+unknown_image = face_recognition.load_image_file(&quot;/Users/keyi/Downloads/IMG_1747.JPG&quot;)
+
+known_encoding = face_recognition.face_encodings(known_image)[0]
+unknown_encoding = face_recognition.face_encodings(unknown_image)[0]
+
+results = face_recognition.compare_faces([known_encoding],
+                                         unknown_encoding,
+                                         tolerance=0.6)
+if results[0] == True:
+    print(&quot;匹配成功，该未知图片与已有图片人脸可匹配！&quot;)
+else:
+    print(&quot;匹配失败！&quot;)
+</code></pre>
+<h2 id="结果输出">结果输出</h2>
+<p>当known_image和unknown_image为同一张人脸时，匹配成功👇🏻</p>
+<figure data-type="image" tabindex="3"><img src="https://7teeen.github.io/post-images/1622187196360.png" alt="" loading="lazy"></figure>
+<p>当known_image和unknown_image为不同人脸时，匹配失败👇🏻</p>
+<figure data-type="image" tabindex="4"><img src="https://7teeen.github.io/post-images/1622187263267.png" alt="" loading="lazy"></figure>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li>
+<li><a href="#demo_1-%E4%BA%BA%E8%84%B8%E5%AE%9A%E4%BD%8D%E4%BB%85opencv">demo_1: 人脸定位（仅opencv）</a>
 <ul>
-<li><a href="#demo_1-%E4%BA%BA%E8%84%B8%E5%AE%9A%E4%BD%8D%E4%BB%85opencv">demo_1: 人脸定位（仅opencv）</a></li>
-<li><a href="#demo_2-%E4%BA%BA%E8%84%B8%E5%AE%9A%E4%BD%8Ddlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85opencv">安装opencv</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0">代码实现</a></li>
+</ul>
+</li>
+<li><a href="#demo_2-%E4%BA%BA%E8%84%B8%E5%AE%9A%E4%BD%8Ddlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85dlib-face_recognition">安装dlib / face_recognition</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-2">代码实现</a></li>
+</ul>
+</li>
+<li><a href="#demo_3-%E4%BA%BA%E8%84%B8%E5%8C%B9%E9%85%8D">demo_3: 人脸匹配</a>
+<ul>
+<li><a href="#%E5%8E%9F%E7%90%86">原理</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-3">代码实现</a></li>
+<li><a href="#%E7%BB%93%E6%9E%9C%E8%BE%93%E5%87%BA">结果输出</a></li>
 </ul>
 </li>
 </ul>

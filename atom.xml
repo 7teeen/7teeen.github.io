@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://7teeen.github.io</id>
     <title>7teen</title>
-    <updated>2021-05-28T03:50:05.984Z</updated>
+    <updated>2021-05-28T07:37:15.429Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://7teeen.github.io"/>
     <link rel="self" href="https://7teeen.github.io/atom.xml"/>
@@ -11,21 +11,17 @@
     <icon>https://7teeen.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 7teen</rights>
     <entry>
-        <title type="html"><![CDATA[Opencv + dlib实现人脸识别]]></title>
+        <title type="html"><![CDATA[Opencv + dlib实现人脸识别与匹配]]></title>
         <id>https://7teeen.github.io/post/opencv-dlib-shi-xian-ren-lian-shi-bie/</id>
         <link href="https://7teeen.github.io/post/opencv-dlib-shi-xian-ren-lian-shi-bie/">
         </link>
         <updated>2021-05-28T03:28:58.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="demo_1-人脸定位仅opencv">demo_1: 人脸定位（仅opencv）</h2>
-<ul>
-<li><strong>安装opencv</strong></li>
-</ul>
+        <content type="html"><![CDATA[<h1 id="demo_1-人脸定位仅opencv">demo_1: 人脸定位（仅opencv）</h1>
+<h2 id="安装opencv">安装opencv</h2>
 <pre><code>pip install opencv-python
 </code></pre>
 <p>❗️需要包<code>Python路径下/Lib/site-packages/cv2/data/haarcascade_frontalface_default.xml</code></p>
-<ul>
-<li><strong>代码</strong></li>
-</ul>
+<h2 id="代码实现">代码实现</h2>
 <p>demo1_1.py</p>
 <pre><code>import cv2
 
@@ -95,17 +91,13 @@ cv2.destroyAllWindows()
 </code></pre>
 <p>可得到人脸识别后图像👇🏻</p>
 <img width="509" alt="image" src="https://user-images.githubusercontent.com/84889770/119914869-d5067500-bf93-11eb-9286-49dcccbeab86.png">
-<h2 id="demo_2-人脸定位dlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</h2>
-<ul>
-<li><strong>安装dlib / face_recognition</strong></li>
-</ul>
+<h1 id="demo_2-人脸定位dlib-face_recognition">demo_2: 人脸定位（dlib + face_recognition）</h1>
+<h2 id="安装dlib-face_recognition">安装dlib / face_recognition</h2>
 <pre><code>pip install dlib
 pip install face_recognition
 </code></pre>
 <p>❗️需要包<code>shape_predictor_68_face_landmarks.dat</code></p>
-<ul>
-<li><strong>demo2代码</strong></li>
-</ul>
+<h2 id="代码实现-2">代码实现</h2>
 <p>demo2.py</p>
 <pre><code>#coding=utf-8
 
@@ -134,6 +126,50 @@ cv2.destroyAllWindows()
 </code></pre>
 <p>可得到人脸定位结果如下👇🏻</p>
 <img width="901" alt="image" src="https://user-images.githubusercontent.com/84889770/119915440-1f3c2600-bf95-11eb-9b7a-640eaa556f7f.png">
+<h1 id="demo_3-人脸匹配">demo_3: 人脸匹配</h1>
+<h2 id="原理">原理</h2>
+<p>每个人脸识别系统都有自己的人脸数据库，该数据库包含人脸特征向量和对应的信息。</p>
+<ul>
+<li>人脸特征向量提取：</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://7teeen.github.io/post-images/1622187304697.png" alt="" loading="lazy"></figure>
+<ul>
+<li>特征向量PCA降维：</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://7teeen.github.io/post-images/1622187313947.png" alt="" loading="lazy"></figure>
+<h2 id="代码实现-3">代码实现</h2>
+<p>demo3.py</p>
+<pre><code>import cv2
+import face_recognition
+#显示已知图片
+known_image=cv2.imread(&quot;/Users/keyi/Downloads/IMG_1892.JPG&quot;)
+cv2.imshow(&quot;image&quot;, known_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+known_image = face_recognition.load_image_file(&quot;/Users/keyi/Downloads/IMG_1892.JPG&quot;)
+# 显示待匹配图片
+unknown_image=cv2.imread(&quot;/Users/keyi/Downloads/IMG_1747.JPG&quot;)
+cv2.imshow(&quot;unknown_image&quot;, unknown_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+unknown_image = face_recognition.load_image_file(&quot;/Users/keyi/Downloads/IMG_1747.JPG&quot;)
+
+known_encoding = face_recognition.face_encodings(known_image)[0]
+unknown_encoding = face_recognition.face_encodings(unknown_image)[0]
+
+results = face_recognition.compare_faces([known_encoding],
+                                         unknown_encoding,
+                                         tolerance=0.6)
+if results[0] == True:
+    print(&quot;匹配成功，该未知图片与已有图片人脸可匹配！&quot;)
+else:
+    print(&quot;匹配失败！&quot;)
+</code></pre>
+<h2 id="结果输出">结果输出</h2>
+<p>当known_image和unknown_image为同一张人脸时，匹配成功👇🏻</p>
+<figure data-type="image" tabindex="3"><img src="https://7teeen.github.io/post-images/1622187196360.png" alt="" loading="lazy"></figure>
+<p>当known_image和unknown_image为不同人脸时，匹配失败👇🏻</p>
+<figure data-type="image" tabindex="4"><img src="https://7teeen.github.io/post-images/1622187263267.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
