@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://7teeen.github.io</id>
     <title>7teen</title>
-    <updated>2021-05-28T07:37:15.429Z</updated>
+    <updated>2021-05-28T07:47:32.479Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://7teeen.github.io"/>
     <link rel="self" href="https://7teeen.github.io/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://7teeen.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 7teen</rights>
     <entry>
-        <title type="html"><![CDATA[Opencv + dlib实现人脸识别与匹配]]></title>
+        <title type="html"><![CDATA[OpenCV + dlib实现人脸识别与匹配]]></title>
         <id>https://7teeen.github.io/post/opencv-dlib-shi-xian-ren-lian-shi-bie/</id>
         <link href="https://7teeen.github.io/post/opencv-dlib-shi-xian-ren-lian-shi-bie/">
         </link>
