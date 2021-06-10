@@ -1,0 +1,262 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Python + ffmpeg进行视频处理 | 7-teen</title>
+<link rel="shortcut icon" href="https://7teeen.github.io/favicon.ico?v=1623288983259">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://7teeen.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Python + ffmpeg进行视频处理 | 7-teen - Atom Feed" href="https://7teeen.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="关于ffmpeg
+
+简介
+
+ffmpeg是一套可以用来记录、转换数字音频、视频，并能将其转化为流的开源计算机程序。它提供了录制、转换以及流化音视频的完整解决方案
+
+安装
+
+因为是很久之前学压制的时候就装好了ffmpeg，所以安装过程在此省略..." />
+    <meta name="keywords" content="媒体大数据" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://7teeen.github.io">
+  <img class="avatar" src="https://7teeen.github.io/images/avatar.png?v=1623288983259" alt="">
+  </a>
+  <h1 class="site-title">
+    7-teen
+  </h1>
+  <p class="site-description">
+    僕らは最初で最後の今を生きているんだよ
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Python + ffmpeg进行视频处理
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-06-03
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://7teeen.github.io/tag/CRWH7MIg1/" class="post-tag">
+                  # 媒体大数据
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="关于ffmpeg">关于ffmpeg</h1>
+<ul>
+<li><strong>简介</strong></li>
+</ul>
+<p>ffmpeg是一套可以用来记录、转换数字音频、视频，并能将其转化为流的开源计算机程序。它提供了录制、转换以及流化音视频的完整解决方案</p>
+<ul>
+<li><strong>安装</strong></li>
+</ul>
+<p>因为是很久之前学压制的时候就装好了ffmpeg，所以安装过程在此省略<br>
+ffmpeg下载地址👉🏻<a href="http://ffmpeg.org/">下载戳这里</a><br>
+选择自己电脑对应的版本安装即可</p>
+<ul>
+<li><strong>可实现的功能</strong></li>
+</ul>
+<p>ffmpeg具有非常强大的功能，包括：视频采集功能、视频格式转换、视频字幕压制、视频抓图、给视频添加水印等</p>
+<h1 id="使用python将视频转化为帧图片">使用python将视频转化为帧图片</h1>
+<p>movie.py</p>
+<pre><code>#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import os
+import cv2
+import subprocess
+
+os.chdir('/Users/keyi/mediabigdata')
+v_path='/Users/keyi/Downloads/pumacsb.mp4'
+image_save='./pic'
+
+cap=cv2.VideoCapture(v_path)
+frame_count=cap.get(cv2.CAP_PROP_FRAME_COUNT)
+
+for i in range(int(frame_count)):
+    _,img=cap.read()
+    cv2.imwrite('./pic/image{}.jpg'.format(i),img)
+
+
+# In[8]:
+
+
+print(dir(cv2))
+
+
+# In[ ]:
+</code></pre>
+<p>可得到pic文件夹中的彩色图片输出👇🏻<br>
+<img src="https://7teeen.github.io/post-images/1622965386688.png" alt="" loading="lazy"></p>
+<p>如果需要输出黑白图片，则在movie.py中添加一行代码即可：<br>
+<code>img=cv2.cvtColor(img,cv2.cv2.COLOR_BGR2GRAY)</code></p>
+<p>可得到pic文件夹中的黑白图片输出👇🏻<br>
+<img src="https://7teeen.github.io/post-images/1622965646302.png" alt="" loading="lazy"></p>
+<h1 id="使用ffmpeg将得到的帧图片拼接成视频">使用ffmpeg将得到的帧图片拼接成视频</h1>
+<p>❗️在进行图片拼接之前，需要知道的是，ffmpeg默认的帧率为25fps，因此只有当你的原视频帧率也为25fps时，才能在分割成图片后再次拼接时，输出正常速度的影片</p>
+<ul>
+<li>
+<p>使用ffmpeg转换视频帧率：<br>
+<code>ffmpeg -i pumacsb.mp4 -r 25 pumacsb25.mp4</code></p>
+</li>
+<li>
+<p>使用ffmpeg拼接黑白图片<br>
+<code>ffmpeg -i /Users/keyi/mediabigdata/pic3/image%d.jpg outputcsb25.mp4</code></p>
+<p>拼接黑白图片时，影片显示出错👇🏻<br>
+<img src="https://7teeen.github.io/post-images/1622967848059.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>使用ffmpeg拼接彩色图片<br>
+<code>ffmpeg -i /Users/keyi/mediabigdata/pic4/image%d.jpg outputcsb25_color.mp4</code></p>
+<p>得到彩色影片👇🏻<br>
+<img src="https://7teeen.github.io/post-images/1622968064761.png" alt="" loading="lazy"></p>
+</li>
+</ul>
+<h1 id="ffmpeg的其他功能">ffmpeg的其他功能</h1>
+<ul>
+<li><strong>视频裁剪滤镜(播放器大小裁剪)</strong><br>
+<code>ffmpeg -i killer.mp4 -vf crop=in_w-200:in_h-200 -c:v libx264 -c:a copy out.mp4</code></li>
+<li><strong>视频裁剪(按时间裁剪)</strong><br>
+<code>ffmpeg -i my.mp4 -ss 00:43:20 -t 00:02:10 -acodec copy -vcodec copy sha.mp4</code></li>
+<li><strong>视频格式转换</strong><br>
+<code>ffmpeg -i input.mp4 output.avi</code></li>
+<li><strong>压制字幕（字幕格式可为ass/srt）</strong><br>
+<code>ffmpeg -i input.mp4 -vf &quot;ass=input.ass&quot; output.mp4</code></li>
+<li><strong>压制logo</strong><br>
+<code>ffmpeg -i input.mp4 -i logo.ico -filter_complex overlay output.mp4</code></li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%85%B3%E4%BA%8Effmpeg">关于ffmpeg</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8python%E5%B0%86%E8%A7%86%E9%A2%91%E8%BD%AC%E5%8C%96%E4%B8%BA%E5%B8%A7%E5%9B%BE%E7%89%87">使用python将视频转化为帧图片</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8ffmpeg%E5%B0%86%E5%BE%97%E5%88%B0%E7%9A%84%E5%B8%A7%E5%9B%BE%E7%89%87%E6%8B%BC%E6%8E%A5%E6%88%90%E8%A7%86%E9%A2%91">使用ffmpeg将得到的帧图片拼接成视频</a></li>
+<li><a href="#ffmpeg%E7%9A%84%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD">ffmpeg的其他功能</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://7teeen.github.io/post/di-tu-ke-shi-hua/">
+              <h3 class="post-title">
+                地图可视化 🌍
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://7teeen.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
